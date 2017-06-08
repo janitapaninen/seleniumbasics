@@ -35,7 +35,6 @@ public class  TestingSample
         testFillForm(driver);
 
         driver.quit();
-
     }
 
     private void testFillForm(WebDriver driver)
@@ -47,21 +46,13 @@ public class  TestingSample
         driver.findElement(By.name("companyName")).sendKeys("Company");
         driver.findElement(By.name("bic")).sendKeys("2220746-7");
 
-        List <WebElement> radioButtons = driver.findElements(By.name("chosenPayment"));
-
-        for (WebElement radio : radioButtons)
-        {
-            if (radio.getAttribute("value").equalsIgnoreCase("2"))
-            {
-                radio.click();
-            }
-        }
+        toggleRadio("chosenPayment", "2", driver);
 
         driver.findElement(By.name("entryDate")).sendKeys("20.02.2020");
         driver.findElement(By.name("entrySum")).sendKeys("150");
         driver.findElement(By.name("forPaymentSum")).sendKeys("10");
 
-        driver.findElement(By.id("contract_file_upload")).sendKeys("/Users/jtapaninen/projects/hello.pdf");
+        driver.findElement(By.id("contract_file_upload")).sendKeys("{path}");
         driver.findElement(By.id("upload_submit")).click();
 
         new WebDriverWait(driver, 10)
@@ -81,4 +72,18 @@ public class  TestingSample
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.tagName("body"), "company.signom.com"));
     }
+
+    //Helper function for radio buttons. Will shorten the code if multiple radio buttons has to be checked
+    private void toggleRadio(String field, String value, WebDriver driver)
+    {
+        List <WebElement> radioButtons = driver.findElements(By.name(field));
+        for (WebElement radio : radioButtons)
+        {
+            if (radio.getAttribute("value").equalsIgnoreCase(value))
+            {
+                radio.click();
+            }
+        }
+    }
+
 }
